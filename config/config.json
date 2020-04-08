@@ -5,7 +5,8 @@
         "database": "proyecto-backend",
         "host": "127.0.0.1",
         "dialect": "sqlite",
-        "storage": "./proyecto-backend.sqlite3"
+        "storage": "./proyecto-backend.sqlite3",
+        "logging": false
     },
     "test": {
         "username": "root",
