@@ -9,10 +9,13 @@ module.exports = {
     create: async function (req, res) {
         try {
             const tasks = await Task.create(req.body);
-            res.json(tasks);
+            res.redirect("/tasks");
         } catch (er) {
             console.log(er);
             res.json({ err });
         }
+    },
+    new: function (req, res) {
+        res.render("tasks/new");
     },
 };
