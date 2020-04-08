@@ -1,4 +1,6 @@
 const express = require("express");
+const methodOverride = require("method-override");
+const morgan = require("morgan");
 const Sequelize = require("sequelize");
 
 const app = express();
@@ -9,6 +11,8 @@ app.set("port", process.env.PORT || 3000);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(morgan("dev"));
+app.use(methodOverride("_method"));
 
 app.set("view engine", "pug");
 
