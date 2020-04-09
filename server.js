@@ -10,6 +10,7 @@ const registrations = require("./routes/registrations.routes");
 const sessions = require("./routes/sessions.routes");
 
 const findUserMiddleware = require("./middlewares/find_user");
+const authUserMiddleware = require("./middlewares/auth_user");
 
 app.set("port", process.env.PORT || 3000);
 
@@ -32,13 +33,20 @@ app.use(
 );
 
 app.use(findUserMiddleware);
+app.use(authUserMiddleware);
 
 app.use(tasks);
 app.use(registrations);
 app.use(sessions);
 
 app.get("/", function (req, res) {
+    if (!req.session.userId) return res.redirect("/sessions");
+
     res.render("home", { user: req.user });
+});
+
+app.get("*", function (req, res) {
+    res.redirect("/sessions");
 });
 
 app.listen(app.get("port"), () => {

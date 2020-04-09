@@ -1,10 +1,10 @@
 const User = require("../models").User;
 
 module.exports = {
-    new: function(req, res) {
+    new: function (req, res) {
         res.render("sessions/new");
     },
-    create: async function(req, res) {
+    create: async function (req, res) {
         try {
             const user = await User.login(req.body.email, req.body.password);
 
@@ -18,5 +18,10 @@ module.exports = {
             console.log(err);
             res.json({ err });
         }
-    }
+    },
+    destroy: function (req, res) {
+        req.session.destroy(function () {
+            res.redirect("/sessions");
+        });
+    },
 };

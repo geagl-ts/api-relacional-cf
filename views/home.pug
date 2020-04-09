@@ -6,3 +6,5 @@ html(lang="en")
         title New Session
     body
         h1= user.email
+        form(action="/sessions?_method=DELETE", method="post")
+            input(type="submit" value="Cerrar sesion")
