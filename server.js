@@ -2,7 +2,6 @@ const express = require("express");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
 const expSession = require("express-session");
-const Sequelize = require("sequelize");
 
 const app = express();
 
