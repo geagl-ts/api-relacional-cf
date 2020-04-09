@@ -9,6 +9,8 @@ const tasks = require("./routes/tasks.routes");
 const registrations = require("./routes/registrations.routes");
 const sessions = require("./routes/sessions.routes");
 
+const findUserMiddleware = require("./middlewares/find_user");
+
 app.set("port", process.env.PORT || 3000);
 
 app.use(express.json());
@@ -29,9 +31,15 @@ app.use(
     })
 );
 
+app.use(findUserMiddleware);
+
 app.use(tasks);
 app.use(registrations);
 app.use(sessions);
+
+app.get("/", function (req, res) {
+    res.render("home", { user: req.user });
+});
 
 app.listen(app.get("port"), () => {
     console.log(`Server on port ${app.get("port")}`);
