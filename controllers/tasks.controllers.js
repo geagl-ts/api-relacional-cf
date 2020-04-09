@@ -43,4 +43,17 @@ module.exports = {
             res.json({ err });
         }
     },
+    destroy: async function (req, res) {
+        try {
+            await Task.destroy({
+                where: {
+                    id: req.params.id,
+                },
+            });
+
+            res.redirect("/tasks");
+        } catch (err) {
+            res.json({ err });
+        }
+    },
 };
