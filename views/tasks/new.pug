@@ -6,5 +6,6 @@ html(lang="en")
         title New Task
     body
         form(action="/tasks" method="POST")
+            input(type="text" placeholder="Ids de las categorias" name="categories")
             textarea(name="description" placeholder="Coloca aqui el pendiente a realizar")
             input(type="submit" value="Guardar")

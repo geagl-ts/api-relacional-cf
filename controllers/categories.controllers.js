@@ -1,4 +1,5 @@
 const Category = require("../models").Category;
+const Task = require("../models").Task;
 
 module.exports = {
     // Render Create
@@ -22,7 +23,7 @@ module.exports = {
     // create
     create: async function (req, res) {
         try {
-            const category = await Category.create(req.body);
+            await Category.create(req.body);
             res.redirect("/categories");
         } catch (err) {
             res.json({ error: err });
@@ -31,9 +32,21 @@ module.exports = {
     // read
     read: async function (req, res) {
         try {
-            const categories = await Category.findAll();
+            const categories = await Category.findAll({
+                include: [
+                    {
+                        model: Task,
+                        as: "tasks",
+                        where: {
+                            userId: req.user.id,
+                        },
+                    },
+                ],
+            });
+
             res.render("categories/index", { categories: categories });
         } catch (err) {
+            console.log(err);
             res.json({ error: err });
         }
     },
@@ -45,6 +58,7 @@ module.exports = {
                     id: req.params.id,
                 },
             });
+
             res.redirect("/categories");
         } catch (err) {
             res.json({ error: err });

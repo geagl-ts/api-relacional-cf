@@ -12,18 +12,23 @@ module.exports = {
                     model: User,
                     as: "user",
                 },
+                "categories",
             ],
         });
         res.render("tasks/show", { task });
     },
     create: async function (req, res) {
         try {
-            await Task.create({
+            const tasks = await Task.create({
                 description: req.body.description,
                 userId: req.user.id,
             });
+
+            const categories = req.body.categories.split(",");
+            await tasks.addCategories(categories);
+
             res.redirect("/tasks");
-        } catch (er) {
+        } catch (err) {
             res.json({ err });
         }
     },
@@ -34,6 +39,7 @@ module.exports = {
                     id: req.params.id,
                 },
             });
+
             res.redirect(`/tasks/${req.params.id}`);
         } catch (err) {
             res.json({ err });
@@ -44,7 +50,8 @@ module.exports = {
     },
     edit: async function (req, res) {
         try {
-            const task = await Task.findByPk(req.params.id);
+            const task = await Task.findByPk(req.params.id, {});
+
             res.render("tasks/edit", { task });
         } catch (err) {
             res.json({ err });

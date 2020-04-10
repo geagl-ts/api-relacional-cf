@@ -5,7 +5,10 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Tareas
     body
-        ul
-            each task in tasks
-                li= task.description
+        each task in tasks
+            strong ID: 
+            p= task.id
+            strong Titulo: 
+            p= task.description
+            hr
     

@@ -6,11 +6,18 @@ html(lang="en")
         title Tareas
     body
         each category in categories
+            strong ID: 
+            p= category.id
             strong Titulo: 
             p= category.title
             strong Color: 
             p= category.color
             hr
+            each task in category.tasks
+                ul
+                    strong Description: 
+                    p= task.description
+                    hr
 
 
     

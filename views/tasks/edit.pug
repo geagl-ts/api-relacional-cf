@@ -6,5 +6,6 @@ html(lang="en")
         title Edit Task
     body
         form(action=`/tasks/${task.id}?_method=PUT` method="POST")
+            textarea(name="categories" placeholder="Coloca aqui las categorias")= categories
             textarea(name="description" placeholder="Coloca aqui el pendiente a realizar")= task.description
             input(type="submit" value="Guardar")
