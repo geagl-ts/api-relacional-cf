@@ -1,0 +1,11 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Edit Task
+    body
+        form(action=`/categories/${category.id}?_method=PUT` method="POST")
+            textarea(name="title" placeholder="Coloca aqui el titulo")= category.title
+            textarea(name="color" placeholder="Coloca aqui el color")= category.color
+            input(type="submit" value="Guardar")

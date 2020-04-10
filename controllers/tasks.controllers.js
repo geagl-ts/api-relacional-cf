@@ -1,27 +1,34 @@
 const Task = require("../models").Task;
+const User = require("../models").User;
 
 module.exports = {
     home: async function (req, res) {
-        const tasks = await Task.findAll();
-
-        res.render("tasks/index", { tasks: tasks });
+        res.render("tasks/index", { tasks: req.user.tasks });
     },
     show: async function (req, res) {
-        const task = await Task.findByPk(req.params.id);
+        const task = await Task.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User,
+                    as: "user",
+                },
+            ],
+        });
         res.render("tasks/show", { task });
     },
     create: async function (req, res) {
         try {
-            await Task.create(req.body);
+            await Task.create({
+                description: req.body.description,
+                userId: req.user.id,
+            });
             res.redirect("/tasks");
         } catch (er) {
-            console.log(er);
             res.json({ err });
         }
     },
     update: async function (req, res) {
         try {
-            console.log(req.params.id);
             await Task.update(req.body, {
                 where: {
                     id: req.params.id,

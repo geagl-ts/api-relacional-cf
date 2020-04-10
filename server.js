@@ -8,6 +8,7 @@ const app = express();
 const tasks = require("./routes/tasks.routes");
 const registrations = require("./routes/registrations.routes");
 const sessions = require("./routes/sessions.routes");
+const categories = require("./routes/categories.routes");
 
 const findUserMiddleware = require("./middlewares/find_user");
 const authUserMiddleware = require("./middlewares/auth_user");
@@ -38,6 +39,7 @@ app.use(authUserMiddleware);
 app.use(tasks);
 app.use(registrations);
 app.use(sessions);
+app.use(categories);
 
 app.get("/", function (req, res) {
     if (!req.session.userId) return res.redirect("/sessions");
