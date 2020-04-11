@@ -3,6 +3,8 @@ const methodOverride = require("method-override");
 const morgan = require("morgan");
 const expSession = require("express-session");
 
+const socketio = require("socket.io");
+
 const app = express();
 
 const tasks = require("./routes/tasks.routes");
@@ -51,6 +53,43 @@ app.get("*", function (req, res) {
     res.redirect("/sessions");
 });
 
-app.listen(app.get("port"), () => {
+let server = app.listen(app.get("port"), () => {
     console.log(`Server on port ${app.get("port")}`);
 });
+
+let io = socketio(server);
+let sockets = {};
+
+let userCount = 0;
+
+io.on("connection", function (socket) {
+    //Manejo de usuarios en tiempo real
+    const userId = socket.request._query.loggeduser;
+    if (userId) sockets[userId] = socket;
+
+    // Eventos en tiempo real
+    userCount++;
+    io.emit("count_updated", { count: userCount });
+
+    socket.on("new_task", function (data) {
+        if (data.userId) {
+            let userSocket = sockets[data.userId];
+            if (!userSocket) return;
+            userSocket.emit("new_task", data);
+        }
+    });
+
+    socket.on("disconnect", function () {
+        Object.keys(sockets).forEach((userId) => {
+            if (userId) {
+                let s = sockets[userId];
+                if (s.id == socket.id) sockets[userId] = null;
+            }
+        });
+
+        userCount--;
+        io.emit("count_updated", { count: userCount });
+    });
+});
+
+const client = require("./realtime/client");

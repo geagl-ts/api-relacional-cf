@@ -6,5 +6,18 @@ html(lang="en")
         title New Session
     body
         h1= user.email
+        span Usuarios conectados 
+        span#connected
         form(action="/sessions?_method=DELETE", method="post")
             input(type="submit" value="Cerrar sesion")
+        script(src="/socket.io/socket.io.js")
+        script.
+            socket = io.connect(window.location.origin, {query: "loggeduser=#{user.id}"})
+
+            socket.on("count_updated", function(data){
+                document.querySelector("#connected").innerHTML = data.count
+            })
+
+            socket.on("new_task", function (data) {
+                console.log(data)
+            });
